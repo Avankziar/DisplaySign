@@ -39,6 +39,7 @@ import me.avankziar.dsi.spigot.database.MysqlHandler;
 import me.avankziar.dsi.spigot.database.MysqlSetup;
 import me.avankziar.dsi.spigot.handler.ConfigHandler;
 import me.avankziar.dsi.spigot.listener.JoinLeaveListener;
+import me.avankziar.dsi.spigot.listener.BlockListener;
 import me.avankziar.dsi.spigot.metric.Metrics;
 import me.avankziar.ifh.general.modifier.ModificationType;
 import me.avankziar.ifh.general.modifier.Modifier;
@@ -305,6 +306,7 @@ public class DSI extends JavaPlugin
 	{
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new JoinLeaveListener(), plugin);
+		pm.registerEvents(new BlockListener(), plugin);
 	}
 	
 	public boolean reload() throws IOException
