@@ -17,7 +17,7 @@ import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import me.avankziar.dsi.general.database.Language.ISO639_2B;
 
-public class YamlHandler implements YamlHandling
+public class YamlHandler
 {	
 	private String pluginname;
 	private Path dataDirectory;
@@ -45,22 +45,10 @@ public class YamlHandler implements YamlHandling
 		return config;
 	}
 	
-	private YamlDocument commands;
-	public YamlDocument getCommands()
-	{
-		return commands;
-	}
-	
 	private YamlDocument lang;
 	public YamlDocument getLang()
 	{
 		return lang;
-	}
-	
-	private YamlDocument mvelang;
-	public YamlDocument getMVELang()
-	{
-		return mvelang;
 	}
 	
 	public YamlHandler(YamlManager.Type type, String pluginname, Logger logger, Path directory, String administrationLanguage)
@@ -102,13 +90,6 @@ public class YamlHandler implements YamlHandling
 			{
 				return false;
 			}
-			f = "commands";
-			commands = YamlDocument.create(new File(directory,"%f%.yml".replace("%f%", f)),
-					getClass().getResourceAsStream("/default.yml"),gsd,lsd,dsd,usd);
-			if(!setupStaticFile(f, commands, yamlManager.getCommandsKey()))
-			{
-				return false;
-			}
 	    } catch (IOException e)
 	    {
 	    	logger.severe("Could not create/load config.yml file! Plugin will shut down!");
@@ -139,12 +120,6 @@ public class YamlHandler implements YamlHandling
 			lang = YamlDocument.create(new File(directory,"%f%.yml".replace("%f%", f)),
 					getClass().getResourceAsStream("/default.yml"),gsd,lsd,dsd,usd);
 			if(!setupStaticFile(f, lang, yamlManager.getLanguageKey()))
-			{
-				return false;
-			}
-			mvelang = YamlDocument.create(new File(directory,"mve_%f%.yml".replace("%f%", f)),
-					getClass().getResourceAsStream("/default.yml"),gsd,lsd,dsd,usd);
-			if(!setupStaticFile(f, mvelang, yamlManager.getModifierValueEntryLanguageKey()))
 			{
 				return false;
 			}
@@ -203,18 +178,5 @@ public class YamlHandler implements YamlHandling
 			}
 		}
 		yamlManager.setLanguageType(languageType);
-	}
-	
-	@Override
-	public String getCommandString(String s)
-	{
-		return getCommands().getString(s);
-	}
-	
-	@Override
-	public String getCommandString(String s, String defaults)
-	{
-		String r = getCommandString(s);
-		return r != null ? r : defaults;
 	}
 }

@@ -3,19 +3,25 @@ package me.avankziar.dsi.spigot.listener;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.WallSign;
-import org.bukkit.command.BlockCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockCookEvent;
+import org.bukkit.event.block.BrewingStartEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityEnterBlockEvent;
+import org.bukkit.event.inventory.BrewEvent;
+import org.bukkit.event.inventory.BrewingStandFuelEvent;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import me.avankziar.dsi.spigot.DSI;
 import me.avankziar.dsi.spigot.handler.SignHandler;
+import me.avankziar.ifh.spigot.event.inventory.InventoryPostUpdateEvent;
 
 public class BlockListener implements Listener
 {
@@ -30,12 +36,20 @@ public class BlockListener implements Listener
 		{
 			return;
 		}
-		WallSign wallsign = (WallSign) event.getBlock().getBlockData();
-		Block block = event.getBlock().getRelative(wallsign.getFacing().getOppositeFace());
-		SignHandler.setSign(block, event.getBlock());
+		final WallSign wallsign = (WallSign) event.getBlock().getBlockData();
+		final Block block = event.getBlock().getRelative(wallsign.getFacing().getOppositeFace());
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				SignHandler.setSign(event.getPlayer(), block, event.getBlock());
+			}
+		}.runTaskLater(DSI.getPlugin(), 1);
+		
 	}
 	
-	private void searchSign(Location l)
+	private void searchSign(final Location l, Player player)
 	{
 		int minx = l.getBlockX() - 1;
 		int miny = l.getBlockY() - 1;
@@ -47,9 +61,10 @@ public class BlockListener implements Listener
 		{
 			for(int y = miny; y <= maxy; y++)
 			{
-				for(int z = minz; x <= maxz; z++)
+				for(int z = minz; z <= maxz; z++)
 				{
-					SignHandler.setSign(l.getBlock(), l.getWorld().getBlockAt(x, y, z));
+					Block b = l.getBlock();
+					SignHandler.setSign(player, b, l.getWorld().getBlockAt(x, y, z));
 				}
 			}
 		}
@@ -67,7 +82,7 @@ public class BlockListener implements Listener
 		{
 			return;
 		}
-		searchSign(l);
+		searchSign(l, (Player) event.getPlayer());
 	}
 	
 	@EventHandler
@@ -77,7 +92,17 @@ public class BlockListener implements Listener
 		{
 			return;
 		}
-		searchSign(event.getBlock().getLocation());
+		searchSign(event.getBlock().getLocation(), null);
+	}
+	
+	@EventHandler
+	public void onFurnaceBurnEvent(FurnaceBurnEvent event)
+	{
+		if(event.isCancelled())
+		{
+			return;
+		}
+		searchSign(event.getBlock().getLocation(), null);
 	}
 	
 	@EventHandler
@@ -87,7 +112,7 @@ public class BlockListener implements Listener
 		{
 			return;
 		}
-		searchSign(event.getBlock().getLocation());
+		searchSign(event.getBlock().getLocation(), null);
 	}
 	
 	@EventHandler
@@ -101,11 +126,11 @@ public class BlockListener implements Listener
 		{
 			return;
 		}
-		searchSign(event.getLocation());
+		searchSign(event.getLocation(), null);
 	}
 	
-	@EventHandler
-	public void CommandBlock(ServerCommandEvent event) 
+	/*@EventHandler
+	public void onServerCommand(ServerCommandEvent event) 
 	{
 		if(event.isCancelled())
 		{
@@ -116,6 +141,42 @@ public class BlockListener implements Listener
         	return;
         }
         BlockCommandSender bcs = (BlockCommandSender) event.getSender();
-        searchSign(bcs.getBlock().getLocation());
-    }
+        searchSign(bcs.getBlock().getLocation(), null);
+    }*/
+	
+	@EventHandler
+	public void onInventoryPostUpdateEvent(InventoryPostUpdateEvent event)
+	{
+		if(event.getInventory() == null || event.getInventory().getLocation() == null)
+		{
+			return;
+		}
+		searchSign(event.getInventory().getLocation(), null);
+	}
+	
+	@EventHandler
+	public void onBrewingStartEvent(BrewingStartEvent event)
+	{
+		searchSign(event.getBlock().getLocation(), null);
+	}
+	
+	@EventHandler
+	public void onBrewingStartEvent(BrewingStandFuelEvent event)
+	{
+		if(event.isCancelled())
+		{
+			return;
+		}
+		searchSign(event.getBlock().getLocation(), null);
+	}
+	
+	@EventHandler
+	public void onBrewEvent(BrewEvent event)
+	{
+		if(event.isCancelled())
+		{
+			return;
+		}
+		searchSign(event.getBlock().getLocation(), null);
+	}
 }

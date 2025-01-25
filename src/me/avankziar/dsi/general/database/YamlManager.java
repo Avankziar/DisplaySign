@@ -2,12 +2,10 @@ package me.avankziar.dsi.general.database;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import me.avankziar.dsi.general.database.Language.ISO639_2B;
-import me.avankziar.dsi.spigot.ModifierValueEntry.Bypass;
 
 public class YamlManager
 {	
@@ -36,9 +34,7 @@ public class YamlManager
 	{
 		this.type = type;
 		initConfig();
-		initCommands();
 		initLanguage();
-		initModifierValueEntryLanguage();
 	}
 	
 	public ISO639_2B getLanguageType()
@@ -432,7 +428,7 @@ public class YamlManager
 				"If 'true' is entered, but IFH Administration is not available, the own config values are automatically used."});
 		addConfig("IFHAdministrationPath", 
 				new Object[] {
-				"bm"},
+				"dsi"},
 				new Object[] {
 				"",
 				"Diese Funktion sorgt dafür, dass das Plugin auf das IFH Interface Administration zugreifen kann.",
@@ -444,16 +440,6 @@ public class YamlManager
 				"The IFH Interface Administration is a central point for the language, server name and mysql data.",
 				"This centralization allows for simple changes/adjustments to precisely this data.",
 				"If the plugin accesses it, the values in its own config are ignored."});
-		addConfig("ServerName",
-				new Object[] {
-				"hub"},
-				new Object[] {
-				"",
-				"Der Server steht für den Namen des Spigotservers, wie er in BungeeCord/Waterfall/Velocity config.yml unter dem Pfad 'servers' angegeben ist.",
-				"Sollte kein BungeeCord/Waterfall oder andere Proxys vorhanden sein oder du nutzt IFH Administration, so kannst du diesen Bereich ignorieren.",
-				"",
-				"The server stands for the name of the spigot server as specified in BungeeCord/Waterfall/Velocity config.yml under the path 'servers'.",
-				"If no BungeeCord/Waterfall or other proxies are available or you are using IFH Administration, you can ignore this area."});
 		addConfig("Language",
 				new Object[] {
 				"ENG"},
@@ -467,284 +453,205 @@ public class YamlManager
 				"The set language. By default, ENG=English and GER=German are included.",
 				"If other languages are required, you can check the following links to see which abbreviation is intended for which language.",
 				"See here, as well as the link, which is also there for Wikipedia.",
-				"https://github.com/Avankziar/RootAdministration/blob/main/src/main/java/me/avankziar/roota/general/Language.java"});
-		addConfig("Mysql.Status",
+				"https://github.com/Avankziar/RootAdministration/blob/main/src/main/java/me/avankziar/roota/general/Language.java"});		
+		addConfig("Chest.Line0",
+				new Object[] {
+				"[DSIChest]",
+				"[DSIChest2]",
+				"[DSIChest3]"},
+				new Object[] {
+				"",
+				"Die Möglichen Variabeln um für die Kisten die Replace Linien zu erhalten.",
+				"Dabei ist immer die Variable minus [ und ] gemeint, welches den Pfad deklariert.",
+				"Pfade können unbegrenzt hinzugefügt werden. Die Standartpfade werden aber immer bleiben, auch wenn diese gelöscht werden.",
+				"Jedoch müssen diese nicht benutzt werden.",
+				"",
+				"The possible variables to obtain the replace lines for the crates.",
+				"This always refers to the variable minus [ and ], which declares the path.",
+				"Paths can be added indefinitely. However, the default paths will always remain, even if they are deleted.",
+				"However, these do not have to be used."});
+		addConfig("Chest.WriteOnBack",
 				new Object[] {
 				false},
 				new Object[] {
 				"",
-				"'Status' ist ein simple Sicherheitsfunktion, damit nicht unnötige Fehler in der Konsole geworfen werden.",
-				"Stelle diesen Wert auf 'true', wenn alle Daten korrekt eingetragen wurden.",
+				"Wenn 'true', dann wird alles auf beiden Seiten des Schildes geschrieben.",
 				"",
-				"'Status' is a simple security function so that unnecessary errors are not thrown in the console.",
-				"Set this value to 'true' if all data has been entered correctly."});
-		addComments(configKeys, "#Mysql", 
+				"If 'true', then everything is written on both sides of the sign."});
+		addConfig("Chest.DSIChest.Permission",
+				new Object[] {
+				"dsi.chest.dsi"},
 				new Object[] {
 				"",
-				"Mysql ist ein relationales Open-Source-SQL-Databaseverwaltungssystem, das von Oracle entwickelt und unterstützt wird.",
-				"'My' ist ein Namenkürzel und 'SQL' steht für Structured Query Language. Eine Programmsprache mit der man Daten auf einer relationalen Datenbank zugreifen und diese verwalten kann.",
-				"Link https://www.mysql.com/de/",
-				"Wenn du IFH Administration nutzt, kann du diesen Bereich ignorieren.",
+				"Die Permission um an einer Kiste die Display auf Schilder einzurichten.",
+				"'null' zum deaktivieren.",
 				"",
-				"Mysql is an open source relational SQL database management system developed and supported by Oracle.",
-				"'My' is a name abbreviation and 'SQL' stands for Structured Query Language. A program language that can be used to access and manage data in a relational database.",
-				"Link https://www.mysql.com",
-				"If you use IFH Administration, you can ignore this section."});
-		addConfig("Mysql.Host",
+				"The permission to set up the display on signs on a box.",
+				"'null' to deactivate."});
+		addConfig("Chest.DSIChest.Line1",
 				new Object[] {
-				"127.0.0.1"},
+				"1) %amount1% %mat1%"},
 				new Object[] {
 				"",
-				"Der Host, oder auch die IP. Sie kann aus einer Zahlenkombination oder aus einer Adresse bestehen.",
-				"Für den Lokalhost, ist es möglich entweder 127.0.0.1 oder 'localhost' einzugeben. Bedenke, manchmal kann es vorkommen,",
-				"das bei gehosteten Server die ServerIp oder Lokalhost möglich ist.",
+				"Die Möglichen Variabeln um für die Kisten die Replace Linien zu erhalten.",
+				"Dabei ist immer die Variable minus [ und ] gemeint, welches den Pfad deklariert.",
+				"%mat1% für das Item als Material welches am meisten vorhanden ist.",
+				"%amount1% für das Item als Anzahl welches am meisten vorhanden ist.",
+				"%mat2% für das Item als Material welches am zweit meisten vorhanden ist.",
+				"%amount2% für das Item als Anzahl welches am zweit meisten vorhanden ist.",
+				"%mat3% für das Item als Material welches am dritt meisten vorhanden ist.",
+				"%amount3% für das Item als Anzahl welches am dritt meisten vorhanden ist.",
+				"%mat4% für das Item als Material welches am viert meisten vorhanden ist.",
+				"%amount4% für das Item als Anzahl welches am viert meisten vorhanden ist.",
+				"%mat5% für das Item als Material welches am fünft meisten vorhanden ist.",
+				"%amount5% für das Item als Anzahl welches am fünft meisten vorhanden ist.",
+				"%mat6% für das Item als Material welches am sechst meisten vorhanden ist.",
+				"%amount6% für das Item als Anzahl welches am sechst meisten vorhanden ist.",
+				"%amounttotal% für die totale Anzahl an Items unabhängig vom Type in der Kiste.",
+				"%amountofitems% für die Anzahl, wieviel verschiedene Itemtypen in der Kiste sind.",
 				"",
-				"The host, or IP. It can consist of a number combination or an address.",
-				"For the local host, it is possible to enter either 127.0.0.1 or >localhost<.",
-				"Please note that sometimes the serverIp or localhost is possible for hosted servers."});
-		addConfig("Mysql.Port",
+				"The possible variables to obtain the replace lines for the crates.",
+				"This always refers to the variable minus [ and ], which declares the path.",
+				"%mat1% for the item as material which is most available.",
+				"%amount1% for the item with the highest count.",
+				"%mat2% for the item as the second most available material.",
+				"%amount2% for the item with the second highest count.",
+				"%mat3% for the item as material which is present the third most.",
+				"%amount3% for the item with the third highest count.",
+				"%mat4% for the item as the fourth most available material.",
+				"%amount4% for the item with the fourth highest count.",
+				"%mat5% for the item as material which is available the fifth most.",
+				"%amount5% for the item with the fifth highest number.",
+				"%mat6% for the item as material which is present the sixth most.",
+				"%amount6% for the item with the sixth highest count.",
+				"%amounttotal% for the total number of items regardless of the type in the chest.",
+				"%amountofitems% for the number of different item types in the chest."});
+		configKeys.put("Chest.DSIChest.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"2) %amount2% %mat2%"}));
+		configKeys.put("Chest.DSIChest.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"3) %amount3% %mat3%"}));
+		configKeys.put("Chest.DSIChest2.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.chest.dis2"}));
+		configKeys.put("Chest.DSIChest2.Line1", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"4) %amount4% %mat4%"}));
+		configKeys.put("Chest.DSIChest2.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"5) %amount5% %mat5%"}));
+		configKeys.put("Chest.DSIChest2.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"6) %amount6% %mat6%"}));
+		configKeys.put("Chest.DSIChest3.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.chest.dis3"}));
+		configKeys.put("Chest.DSIChest3.Line1", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Total: %amounttotal%"}));
+		configKeys.put("Chest.DSIChest3.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Itemstyps: %amountofitems%"}));
+		configKeys.put("Chest.DSIChest3.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				""}));
+		//--------------------------
+		configKeys.put("Furnace.Line0", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"[DSIFurnace]",
+				"[DSIFurnace2]"}));
+		configKeys.put("Furnace.WriteOnBack", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				false}));
+		configKeys.put("Furnace.DSIFurnace.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.furnace.dsi"}));
+		addConfig("Furnace.DSIFurnace.Line1",
 				new Object[] {
-				3306},
-				new Object[] {
-				"",
-				"Ein Port oder eine Portnummer ist in Rechnernetzen eine Netzwerkadresse,",
-				"mit der das Betriebssystem die Datenpakete eines Transportprotokolls zu einem Prozess zuordnet.",
-				"Ein Port für Mysql ist standart gemäß 3306.",
-				"",
-				"In computer networks, a port or port number ",
-				"is a network address with which the operating system assigns the data packets of a transport protocol to a process.",
-				"A port for Mysql is standard according to 3306."});
-		addConfig("Mysql.DatabaseName",
-				new Object[] {
-				"mydatabase"},
-				new Object[] {
-				"",
-				"Name der Datenbank in Mysql.",
-				"",
-				"Name of the database in Mysql."});
-		addConfig("Mysql.SSLEnabled",
-				new Object[] {
-				false},
-				new Object[] {
-				"",
-				"SSL ist einer der drei Möglichkeiten, welcher, solang man nicht weiß, was es ist, es so lassen sollte wie es ist.",
-				"",
-				"SSL is one of the three options which, as long as you don't know what it is, you should leave it as it is."});
-		addConfig("Mysql.AutoReconnect",
-				new Object[] {
-				true},
-				new Object[] {
-				"",
-				"AutoReconnect ist einer der drei Möglichkeiten, welcher, solang man nicht weiß, was es ist, es so lassen sollte wie es ist.",
-				"",
-				"AutoReconnect is one of the three options which, as long as you don't know what it is, you should leave it as it is."});
-		addConfig("Mysql.VerifyServerCertificate",
-				new Object[] {
-				false},
-				new Object[] {
-				"",
-				"VerifyServerCertificate ist einer der drei Möglichkeiten, welcher, solang man nicht weiß, was es ist, es so lassen sollte wie es ist.",
-				"",
-				"VerifyServerCertificate is one of the three options which, as long as you don't know what it is, you should leave it as it is."});
-		addConfig("Mysql.User",
-				new Object[] {
-				"admin"},
-				new Object[] {
-				"",
-				"Der User, welcher auf die Mysql zugreifen soll.",
-				"",
-				"The user who should access the Mysql."});
-		addConfig("Mysql.Password",
-				new Object[] {
-				"not_0123456789"},
-				new Object[] {
-				"",
-				"Das Passwort des Users, womit er Zugang zu Mysql bekommt.",
-				"",
-				"The user's password, with which he gets access to Mysql."});
-		
-		addConfig("EnableMechanic.Modifier",
-				new Object[] {
-				true},
+				"Res: %resultmat%"},
 				new Object[] {
 				"",
-				"Ermöglicht TT die Benutzung von IFH Interface Modifier.",
-				"Es erlaubt, dass externe Plugins oder per Befehl Zahlenmodifikatoren in bestimmte Werten einfließen.",
-				"Bspw. könnte es dazu führen, dass die Spieler mehr regestrierte Öfen besitzen dürfen.",
+				"Listet auf, was in der 2 Linie geschrieben wird (Linie 1 bzw. 0 im Code ist für die Schildzuweisung dar)",
+				"Mögliche Replacer sind:",
+				"%resultmat% das Item als Material, welches als Resultat aus dem Ofen kommen wird.",
+				"%amount% die Anzahl an Items welche schon aus dem Ofen vom jetztigen Rezept gekommen sind.",
+				"%cookingbookcategory% die Kategorie des Kochbuches zu dem dieses Rezept gehört.",
+				"%burntime% welche als Sekunden dargestellte Zeit wie lange der Ofen noch brennt. Ohne mögliche wartenden Brennstoff dazuzuzählen.",
 				"",
-				"Enables TT to use IFH interface modifiers.",
-				"It allows external plugins or by command to include number modifiers in certain values.",
-				"For example, it could lead to players being allowed to own more registered furnace."});
-		addConfig("EnableMechanic.ValueEntry",
+				"Lists what is written in the 2 line (line 1 or 0 in the code is for the sign assignment)",
+				"Possible replacers are:",
+				"%resultmat% das Item als Material, welches als Resultat aus dem Ofen kommen wird.",
+				"%amount% the number of items that have already come out of the oven from the current recipe.",
+				"%cookingbookcategory% the category of the cookbook to which this recipe belongs.",
+				"%burntime% which is the time in seconds how long the stove is still burning. Without counting possible waiting fuel."});
+		configKeys.put("Furnace.DSIFurnace.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"x%amount%"}));
+		configKeys.put("Furnace.DSIFurnace.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"BurnTime: %burntime%s"}));
+		configKeys.put("Furnace.DSIFurnace2.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.furnace.dsi2"}));
+		configKeys.put("Furnace.DSIFurnace2.Line1", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"%amount%x"}));
+		configKeys.put("Furnace.DSIFurnace2.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"%resultmat%"}));
+		configKeys.put("Furnace.DSIFurnace2.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				""}));
+		//--------------------------
+		configKeys.put("Beehive.Line0", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"[DSIBeehive]",
+				"[DSIBeehive2]"}));
+		configKeys.put("Beehive.WriteOnBack", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				false}));
+		configKeys.put("Beehive.DSIBeehive.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.beehive.dsi"}));
+		addConfig("Beehive.DSIBeehive.Line1",
 				new Object[] {
-				true},
+				"Bees: %entities%"},
 				new Object[] {
 				"",
-				"Ermöglicht TT die Benutzung von IFH Interface ValueEntry.",
-				"Es erlaubt, dass externe Plugins oder per Befehl Werteeinträge vornehmen.",
-				"Bspw. könnte man dadurch bestimmte Befehle oder Technologien für Spieler freischalten.",
+				"Listet auf, was in der 2 Linie geschrieben wird (Linie 1 bzw. 0 im Code ist für die Schildzuweisung dar)",
+				"Mögliche Replacer sind:",
+				"%entities%, die Anzahl an Bienen im Nest.",
+				"%honeylevel%, das Honiglevel des Nest.",
 				"",
-				"Enables TT to use the IFH interface ValueEntry.",
-				"It allows external plugins or commands to make value entries.",
-				"For example, it could be used to unlock certain commands or technologies for players."});
-		
-		configKeys.put("EnableCommands.Base"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				true}));
-		
-		addConfig("ValueEntry.OverrulePermission",
+				"Lists what is written in the 2 line (line 1 or 0 in the code is for the sign assignment)",
+				"Possible replacers are:",
+				"%entities%, the number of bees in the nest.",
+				"%honeylevel%, the honey level of the nest."});
+		configKeys.put("Beehive.DSIBeehive.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Honey: %honeylevel%"}));
+		configKeys.put("Beehive.DSIBeehive.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				""}));
+		configKeys.put("Beehive.DSIBeehive2.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.beehive.dsi2"}));
+		configKeys.put("Beehive.DSIBeehive2.Line1", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Bees: %entities%"}));
+		configKeys.put("Beehive.DSIBeehive2.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"-------------------"}));
+		configKeys.put("Beehive.DSIBeehive2.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Honey: %honeylevel%"}));
+		//--------------------------
+		configKeys.put("Brewingstand.Line0", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"[DSIBrewing]",
+				"[DSIBrewing2]"}));
+		configKeys.put("Brewingstand.WriteOnBack", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				false}));
+		configKeys.put("Brewingstand.DSIBrewing.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.brewingstand.dsi"}));
+		addConfig("Brewingstand.DSIBrewing.Line1",
 				new Object[] {
-				false},
+				"Fuellev: %fuellevel%"},
 				new Object[] {
 				"",
-				"Sollte ValueEntry eingeschalten und installiert sein, so wird bei fast allen Permissionabfragen ValueEntry mit abgefragt.",
-				"Fall 1: ValueEntry ist nicht vorhanden oder nicht eingschaltet. So wird die Permission normal abgefragt.",
-				"Für alle weitern Fälle ist ValueEntry vorhanden und eingeschaltet.",
-				"Fall 2: Der Werteeintrag für den Spieler für diesen abgefragten Wert ist nicht vorhanden,",
-				"so wird wenn 'OverrulePermission'=true immer 'false' zurückgegeben.",
-				"Ist 'OverrulePermission'=false wird eine normale Permissionabfrage gemacht.",
-				"Fall 3: Der Werteeintrag für den Spieler für diesen abgefragten Wert ist vorhanden,",
-				"so wird wenn 'OverrulePermission'=true der hinterlegte Werteeintrag zurückgegebn.",
-				"Wenn 'OverrulePermission'=false ist, wird 'true' zurückgegeben wenn der hinterlegte Werteeintrag ODER die Permissionabfrage 'true' ist.",
-				"Sollten beide 'false' sein, wird 'false' zurückgegeben.",
+				"Listet auf, was in der 2 Linie geschrieben wird (Linie 1 bzw. 0 im Code ist für die Schildzuweisung dar)",
+				"Mögliche Replacer sind:",
+				"%fuellevel%, listet das Fuellevel des Braustand auf.",
+				"%ingredient%, listet das Item auf, welches momentan als Zutat gilt.",
 				"",
-				"If ValueEntry is switched on and installed, ValueEntry is also queried for almost all permission queries.",
-				"Case 1: ValueEntry is not present or not switched on. The permission is queried normally.",
-				"For all other cases, ValueEntry is present and switched on.",
-				"Case 2: The value entry for the player for this queried value is not available,",
-				"so if 'OverrulePermission'=true, 'false' is always returned.",
-				"If 'OverrulePermission'=false, a normal permission query is made.",
-				"Case 3: The value entry for the player for this queried value exists,",
-				"so if 'OverrulePermission'=true the stored value entry is returned.",
-				"If 'OverrulePermission'=false, 'true' is returned if the stored value entry OR the permission query is 'true'.",
-				"If both are 'false', 'false' is returned."});
-		/*
-		 * The "Stringlist" are define so.
-		 */
-		configKeys.put("GuiFlatFileNames"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				"guiOne",
-				"guiTwo",}));
-		/*
-		 * If there was a second language, with also 2 entry, so would Entry 1 and two for the first and 3 and 4 four the second language.
-		 */	
-	}
-	
-	@SuppressWarnings("unused") //INFO:Commands
-	public void initCommands()
-	{
-		comBypass();
-		String path = "";
-		commandsInput("path", "base", "perm.command.perm", 
-				"/base [pagenumber]", "/base ", false,
-				"&c/base &f| Infoseite für alle Befehle.",
-				"&c/base &f| Info page for all commands.",
-				"&bBefehlsrecht für &f/base",
-				"&bCommandright for &f/base",
-				"&eBasisbefehl für das BaseTemplate Plugin.",
-				"&eGroundcommand for the BaseTemplate Plugin.");
-		String basePermission = "perm.base.";
-		argumentInput("base_argument", "argument", basePermission,
-				"/base argument <id>", "/econ deletelog ", false,
-				"&c/base argument &f| Ein Subbefehl",
-				"&c/base argument &f| A Subcommand.",
-				"&bBefehlsrecht für &f/base argument",
-				"&bCommandright for &f/base argument",
-				"&eBasisbefehl für das BaseTemplate Plugin.",
-				"&eGroundcommand for the BaseTemplate Plugin.");
-	}
-	
-	private void comBypass() //INFO:ComBypass
-	{
-		List<Bypass.Permission> list = new ArrayList<Bypass.Permission>(EnumSet.allOf(Bypass.Permission.class));
-		for(Bypass.Permission ept : list)
-		{
-			commandsKeys.put("Bypass."+ept.toString().replace("_", ".")
-					, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-					"base."+ept.toString().toLowerCase().replace("_", ".")}));
-		}
-		
-		List<Bypass.Counter> list2 = new ArrayList<Bypass.Counter>(EnumSet.allOf(Bypass.Counter.class));
-		for(Bypass.Counter ept : list2)
-		{
-			if(!ept.forPermission())
-			{
-				continue;
-			}
-			commandsKeys.put("Count."+ept.toString().replace("_", ".")
-					, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-					"base."+ept.toString().toLowerCase().replace("_", ".")}));
-		}
-	}
-	
-	private void commandsInput(String path, String name, String basePermission, 
-			String suggestion, String commandString, boolean putUpCmdPermToBonusMalusSystem,
-			String helpInfoGerman, String helpInfoEnglish,
-			String dnGerman, String dnEnglish,
-			String exGerman, String exEnglish)
-	{
-		commandsKeys.put(path+".Name"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				name}));
-		commandsKeys.put(path+".Permission"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				basePermission}));
-		commandsKeys.put(path+".Suggestion"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				suggestion}));
-		commandsKeys.put(path+".PutUpCommandPermToBonusMalusSystem"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				putUpCmdPermToBonusMalusSystem}));
-		commandsKeys.put(path+".CommandString"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				commandString}));
-		commandsKeys.put(path+".HelpInfo"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-				helpInfoGerman,
-				helpInfoEnglish}));
-		commandsKeys.put(path+".Displayname"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-				dnGerman,
-				dnEnglish}));
-		commandsKeys.put(path+".Explanation"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-				exGerman,
-				exEnglish}));
-	}
-	
-	private void argumentInput(String path, String argument, String basePermission, 
-			String suggestion, String commandString, boolean putUpCmdPermToBonusMalusSystem,
-			String helpInfoGerman, String helpInfoEnglish,
-			String dnGerman, String dnEnglish,
-			String exGerman, String exEnglish)
-	{
-		commandsKeys.put(path+".Argument"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				argument}));
-		commandsKeys.put(path+".Permission"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				basePermission+"."+argument}));
-		commandsKeys.put(path+".Suggestion"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				suggestion}));
-		commandsKeys.put(path+".PutUpCommandPermToBonusMalusSystem"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				putUpCmdPermToBonusMalusSystem}));
-		commandsKeys.put(path+".CommandString"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				commandString}));
-		commandsKeys.put(path+".HelpInfo"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-				helpInfoGerman,
-				helpInfoEnglish}));
-		commandsKeys.put(path+".Displayname"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-				dnGerman,
-				dnEnglish}));
-		commandsKeys.put(path+".Explanation"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-				exGerman,
-				exEnglish}));
+				"Lists what is written in the 2 line (line 1 or 0 in the code is for the sign assignment)",
+				"Possible replacers are:",
+				"%fuellevel%, lists the filling level of the brewing state.",
+				"%ingredient%, lists the item that is currently considered an ingredient."});
+		configKeys.put("Brewingstand.DSIBrewing.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"-------------------"}));
+		configKeys.put("Brewingstand.DSIBrewing.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Ingd: %ingredient%"}));
+		configKeys.put("Brewingstand.DSIBrewing2.Permission", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"dsi.beehive.dsi2"}));
+		configKeys.put("Brewingstand.DSIBrewing2.Line1", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Not your Brewstand!"}));
+		configKeys.put("Brewingstand.DSIBrewing2.Line2", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"-------------------"}));
+		configKeys.put("Brewingstand.DSIBrewing2.Line3", new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
+				"Shush away!"}));
 	}
 	
 	public void initLanguage() //INFO:Languages
@@ -797,29 +704,5 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&c✖",
 						"&c✖"}));
-	}
-	
-	public void initModifierValueEntryLanguage() //INFO:BonusMalusLanguages
-	{
-		mvelanguageKeys.put(Bypass.Permission.BASE.toString()+".Displayname",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eByasspermission für",
-						"&eBypasspermission for"}));
-		mvelanguageKeys.put(Bypass.Permission.BASE.toString()+".Explanation",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eByasspermission für",
-						"&edas Plugin BaseTemplate",
-						"&eBypasspermission for",
-						"&ethe plugin BaseTemplate"}));
-		mvelanguageKeys.put(Bypass.Counter.BASE.toString()+".Displayname",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eZählpermission für",
-						"&eCountpermission for"}));
-		mvelanguageKeys.put(Bypass.Counter.BASE.toString()+".Explanation",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eZählpermission für",
-						"&edas Plugin BaseTemplate",
-						"&eCountpermission for",
-						"&ethe plugin BaseTemplate"}));
 	}
 }
