@@ -72,6 +72,7 @@ public class SignHandler
 		default:
 			break;
 		case CHEST:
+		case TRAPPED_CHEST:
 			mat = Material.CHEST;
 			path = isDisplaySign(sign, mat);
 			if(path == null)
